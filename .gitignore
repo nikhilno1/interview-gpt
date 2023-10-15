@@ -47,5 +47,5 @@ __pycache__/
 
 recordings/
 # Only include sample folder inside qna
-qna/
+qna/*
 !/qna/sample
