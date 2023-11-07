@@ -50,7 +50,7 @@ temp/
 
 # Only include sample folder inside qna
 qna/*
-!/qna/sample
+!/qna/sample/
 !/qna/all_questions.txt
 
 # Video recordings
