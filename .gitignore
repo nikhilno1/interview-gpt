@@ -47,7 +47,6 @@ __pycache__/
 
 recordings/
 temp/
-data/
 
 # Only include sample folder inside qna
 qna/*
