@@ -59,3 +59,4 @@ qna/*
 
 # Pickled file
 .pkl
+data/*.pkl
