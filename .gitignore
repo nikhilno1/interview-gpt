@@ -46,7 +46,17 @@ __pycache__/
 *.so
 
 recordings/
+temp/
+data/
+
 # Only include sample folder inside qna
 qna/*
 !/qna/sample
 !/qna/all_questions.txt
+
+# Video recordings
+*.avi
+*.mp4
+
+# Pickled file
+.pkl
