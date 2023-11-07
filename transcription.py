@@ -77,8 +77,9 @@ def do_transcribe():
     st.header("Transcript")
     st.write(transcript_text)
     
-    # Save the transcript to a text file
-    with open("transcript.txt", "w") as f:
+    # Save the transcript to a text file    
+    a_file = os.path.splitext(os.path.basename(audio_file_path))[0]
+    with open("transcripts/ts_" + a_file + ".txt", "w") as f:
         f.write(transcript_text)
         
     return transcript_text

@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 from transcription import run_transcription_app, do_transcribe
-from question_folders import QUESTIONS_DATA
+from create_question_folders import QUESTIONS_DATA
 from evaluate_answer import evaluation_result
 
 # Parse the question data separated by | and then sort it alphabetically based on the second field (summary)
