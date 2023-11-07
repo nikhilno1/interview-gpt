@@ -32,13 +32,7 @@ def read_qna_dict_from_file():
 
     except (EOFError, FileNotFoundError, pickle.UnpicklingError) as e:
         print(f"Error occurred while reading the qna_dict file: {e}")
-        qna_dict = {}
-
-    # Now you can use qna_dict
-    print("Initial qna_dict - ")
-    #print("START###################")
-    #print(qna_dict)
-    #print("END###################")
+        qna_dict = {}    
 
 def write_qna_dict_to_file():
     global qna_dict
@@ -46,15 +40,12 @@ def write_qna_dict_to_file():
     try:
         with open(qna_dict_file_path, 'wb') as qna_dict_file:
             pickle.dump(qna_dict, qna_dict_file)    
-            print(f"Data successfully saved to {qna_dict_file}")
-            #print("START++++++++++++++++++++++")
-            #print(qna_dict)
-            #print("END++++++++++++++++++++++")
+            print(f"QnA data successfully saved to {qna_dict_file_path}")            
         
     except FileNotFoundError:
-        print(f"File not found: {qna_dict_file}")
+        print(f"File not found: {qna_dict_file_path}")
     except IOError:
-        print(f"IOError: Failed to save data to {qna_dict_file}")
+        print(f"IOError: Failed to save data to {qna_dict_file_path}")
     except pickle.PicklingError:
         print("PicklingError: Failed to pickle data.")
     except Exception as e:
@@ -97,31 +88,26 @@ def generate_all_answers(directory):
     for root, dirs, files in os.walk(directory):
         if "sample" in dirs:
             dirs.remove("sample")
-        for dir in dirs:            
-            #print(os.path.join(root, dir))
-            #print(dir)
+        for dir in dirs:
             file_path =  os.path.join(root, dir) + '/'
             with open( file_path + ALL_FILE_NAMES[0], 'r') as file:
-                question = file.read()
-                #print("question folder found", question)
+                question = file.read()                
                 
             with open( file_path + ALL_FILE_NAMES[1], 'r') as file:
                 rough_answer = file.read()
             
             # arbitrary string length to check for some answer provided by user
-            if len(rough_answer) < 10:
-                #print("skipping question due to not enough characters", dir)
+            if len(rough_answer) < 10:                
                 continue
             else:
                 if(dir in qna_dict):
                     question_data = json.loads(qna_dict[dir])
                     if(question == question_data["question"] and rough_answer == question_data["rough_answer"]):
-                        print("skipping question due to no change in question or answer", dir)
+                        #print("skipping question due to no change in question or answer", dir)
                         continue                
-                print("proceeding with", dir)
-                # chatgpt_answer = generate_final_answer(question, rough_answer)    
-                chatgpt_answer = "test"
-                print(chatgpt_answer)
+                print("Getting ChatGPT answer for", dir)
+                chatgpt_answer = generate_final_answer(question, rough_answer)                    
+                # print(chatgpt_answer)
 
                 with open( file_path + ALL_FILE_NAMES[2], 'w') as file:
                     file.write(chatgpt_answer)
@@ -134,13 +120,8 @@ def generate_all_answers(directory):
                     "chatgpt_answer": chatgpt_answer
                 }
                 json_string = json.dumps(json_data)
-                qna_dict[dir] =  json_string
-                
-                print("printing qna_dict after updating answer")
-                #print("START========================")            
-                #print(qna_dict)
-                #print("END========================")            
-            
+                qna_dict[dir] =  json_string              
+                            
 # Main application logic
 def main():
     read_qna_dict_from_file()
