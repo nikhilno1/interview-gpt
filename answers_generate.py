@@ -19,6 +19,7 @@ qna_dict_file_path = 'data/qna_dict.pkl'
 qna_dict = {}
 def read_qna_dict_from_file():
     global qna_dict
+    global qna_dict_file_path
     # Try to load the pickle file if it exists
     try:
         if os.path.exists(qna_dict_file_path):
@@ -41,6 +42,7 @@ def read_qna_dict_from_file():
 
 def write_qna_dict_to_file():
     global qna_dict
+    global qna_dict_file_path
     try:
         with open(qna_dict_file_path, 'wb') as qna_dict_file:
             pickle.dump(qna_dict, qna_dict_file)    
@@ -48,7 +50,6 @@ def write_qna_dict_to_file():
             #print("START++++++++++++++++++++++")
             #print(qna_dict)
             #print("END++++++++++++++++++++++")
-
         
     except FileNotFoundError:
         print(f"File not found: {qna_dict_file}")
