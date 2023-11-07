@@ -2,7 +2,7 @@ from langchain.prompts import BaseChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from typing import List, Union
 import openai
-from config import CHAT_MODEL, SYSTEM_PROMPT, CHATGPT_ANSWER_PROMPT, ALL_FILE_NAMES
+from config import CHAT_MODEL, SYSTEM_ANSWER_PROMPT, CHATGPT_ANSWER_PROMPT, ALL_FILE_NAMES, QNA_FOLDER
 
 import json
 import os
@@ -77,7 +77,7 @@ def generate_final_answer(question, rough_answer):
     )    
     final_answer = openai.ChatCompletion.create(
         model=CHAT_MODEL,
-        messages=[{"role": "system", "content": SYSTEM_PROMPT+user_defined_prompt},
+        messages=[{"role": "system", "content": SYSTEM_ANSWER_PROMPT+user_defined_prompt},
                   {"role": "user", "content": chatgpt_answer_prepped}],
         max_tokens=1000,
     )    
@@ -125,7 +125,7 @@ def generate_all_answers(directory):
 # Main application logic
 def main():
     read_qna_dict_from_file()
-    generate_all_answers("qna")
+    generate_all_answers(QNA_FOLDER)
     write_qna_dict_to_file()
 
 if __name__ == '__main__':

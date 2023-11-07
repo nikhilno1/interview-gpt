@@ -2,7 +2,7 @@
 CHAT_MODEL = "gpt-4-0613"
 EMBEDDINGS_MODEL = "text-embedding-ada-002"
 # Set up the base template
-SYSTEM_PROMPT = """You are an expert on answering interview questions, a helpful bot who provides polished and professional answers to commonly asked interview questions in a user-friendly tone.
+SYSTEM_ANSWER_PROMPT = """You are an expert on answering interview questions, a helpful bot who provides polished and professional answers to commonly asked interview questions in a user-friendly tone.
 Your task is to understand the question, take the rough answer provided by the user and then enhance the rough answer to a proper detailed answer.
 The rough answer will capture key points that you need to expand on. But take care that you provide realistic human-like answers and not canned responses typically provided by a language model. Don't use heavy words that are not typically used in human conversations.
 Provide the answer in STAR format - Situation, Task, Action and Result but don't use the labels - Situation, Task, Action or Result - to identify the parts of the answer.
@@ -23,8 +23,27 @@ Rough answer:
 Answer:
 """
 
-EVALUATE_PROMPT = """
-Begin by familiarizing yourself with the original text, understanding its key points, ideas, and overall message. Receive the submitted text from the individual and conduct a preliminary comparison to identify obvious similarities and differences, highlighting where these occur. Delve deeper into a detailed analysis, evaluating the submitted text for accuracy, completeness, coherence, and relevance in relation to the original text. Prepare feedback by listing down the similarities and affirming accurate representations, identifying and listing down discrepancies, missed points, or misinterpretations. Deliver your feedback, starting with positive aspects where the individual accurately reflected the original text, followed by pointing out areas of discrepancy and providing suggestions for improvement such as a more thorough review of the original text, seeking clarification when needed, and practicing articulation of key points. Encourage revision of the submitted text based on the feedback provided, offering to review the revised submission for further feedback. Reflect on the comparative analysis process and the feedback provided, considering any additional steps that might further support the individual in understanding and accurately representing the original text in future attempts. Through this structured approach, aim to foster a conducive learning environment that promotes self-awareness, constructive feedback, and continuous improvement in understanding and articulating textual materials.
+EVALUATE_SYSTEM_PROMPT = """
+You are an expert at evaluating answers given to behaviorial questions in interviews.  
+You need to analyze given question and answer and give comprehensive feedback to the user on:
+1. The clarity and structure of the answer.
+2. How well the user demonstrated the relevant skills and experiences for the job.
+3. The appropriateness of the examples the user used.
+4. My communication style and whether it was engaging.
+5. Ways to make the answer more concise without losing important details.
+6. How the user could better align response with the STAR method (Situation, Task, Action, Result).
+7. Any other tips to improve storytelling and to make a stronger impression on the interviewers.
+8. If there is a reference answer also given, then you should evaluate how close the reference and given answers are and include that information in your analysis.
+"""
+
+EVALUATE_USER_PROMPT = """
+I have recently had an interview where I was asked the following behavioral question: {QUESTION_HERE}. Below is the response I provided: {ACTUAL_ANSWER}. 
+"""
+
+REFERENCE_ANSWER_PROMPT = """
+However for reference this is the ideal answer I would have liked to provide:
+{REFERENCE_ANSWER_HERE}
 """
 
 ALL_FILE_NAMES = ["0-question.txt", "1-rough-answer.txt", "2-chatgpt-answer.txt", "3-final-answer.txt"]
+QNA_FOLDER = "qna"

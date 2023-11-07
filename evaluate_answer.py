@@ -1,32 +1,37 @@
 import streamlit as st
 import openai
 import os
-from config import CHAT_MODEL, EVALUATE_PROMPT, ALL_FILE_NAMES
+from config import CHAT_MODEL, EVALUATE_SYSTEM_PROMPT, EVALUATE_USER_PROMPT, REFERENCE_ANSWER_PROMPT, ALL_FILE_NAMES, QNA_FOLDER
 
-def get_reference_answer(selected_option):
+def get_qna_content(selected_option, file_name):
     # Construct the full path to the file
     if selected_option is None:
         st.write ("No option has been selected!")
     else:
-        file_path = os.path.join("qna", selected_option, ALL_FILE_NAMES[3])
+        file_path = os.path.join(QNA_FOLDER, selected_option, file_name)
            
     # Open and read the file
     with open(file_path, 'r') as file:
         content = file.read()
-        print(content)
+        #print(content)
 
     return content
 
-def evaluation_result(text_transcribed, selected_question):
+def evaluation_result(actual_answer, selected_option):
     st.header("Analysis")
     with st.spinner("Evaluating your answer..."):    
-        ref_answer = get_reference_answer(selected_question)
-        chat_messages = [
-            {"role": "system", "content": EVALUATE_PROMPT},
-            {"role": "user", "content": f'Original Text: "{ref_answer}"'},
-            {"role": "user", "content": f'Submitted Text: "{text_transcribed}"'}
-        ]
-        
+        question = get_qna_content(selected_option, ALL_FILE_NAMES[0])
+        reference_answer = get_qna_content(selected_option, ALL_FILE_NAMES[3])
+
+        evaluate_answer_prepped = EVALUATE_USER_PROMPT.format(
+            QUESTION_HERE=question, ACTUAL_ANSWER=actual_answer
+        )
+        if len(reference_answer) > 10:
+            evaluate_answer_prepped += REFERENCE_ANSWER_PROMPT.format(REFERENCE_ANSWER_HERE=reference_answer)
+             
+        chat_messages = [{"role": "system", "content": EVALUATE_SYSTEM_PROMPT},
+                         {"role": "user", "content": evaluate_answer_prepped}]
+                                  
         compare_answer = openai.ChatCompletion.create(
             model=CHAT_MODEL,
             messages=chat_messages,

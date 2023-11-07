@@ -61,3 +61,6 @@ qna/*
 # Pickled file
 .pkl
 data/*.pkl
+
+# Transcripts
+transcripts/*.txt
