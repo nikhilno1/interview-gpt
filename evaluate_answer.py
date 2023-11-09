@@ -5,7 +5,7 @@ from config import CHAT_MODEL, EVALUATE_SYSTEM_PROMPT, EVALUATE_USER_PROMPT, REF
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env.local")
-user_job_title = os.getenv("USER_JOB_TITLE", "Senior Software Engineer")
+user_job_title = os.getenv("USER_JOB_TITLE", "")
 
 
 def get_qna_content(selected_option, file_name):
