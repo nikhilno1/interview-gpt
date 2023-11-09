@@ -3,6 +3,7 @@ from langchain.chat_models import ChatOpenAI
 from typing import List, Union
 import openai
 from config import CHAT_MODEL, SYSTEM_ANSWER_PROMPT, CHATGPT_ANSWER_PROMPT, ALL_FILE_NAMES, QNA_FOLDER
+import streamlit as st
 
 import json
 import os
@@ -12,7 +13,10 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env.local")
 openai.api_key = os.getenv("OPENAI_API_KEY", "")
+
 user_defined_prompt = os.getenv("USER_DEFINED_PROMPT", "")
+if user_defined_prompt == "":
+    user_defined_prompt = st.secrets["OPENAI_API_KEY"]
 
 # Path to the pickle file
 qna_dict_file_path = 'data/qna_dict.pkl'

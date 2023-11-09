@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env.local")
 user_job_title = os.getenv("USER_JOB_TITLE", "")
-
+if user_job_title == "":
+    user_job_title = st.secrets["USER_JOB_TITLE"]
 
 def get_qna_content(selected_option, file_name):
     # Construct the full path to the file
