@@ -1,5 +1,6 @@
 #CHAT_MODEL = "gpt-3.5-turbo-0613"
-CHAT_MODEL = "gpt-4-0613"
+#CHAT_MODEL = "gpt-4-0613"
+CHAT_MODEL = "gpt-4-1106-preview"
 EMBEDDINGS_MODEL = "text-embedding-ada-002"
 # Set up the base template
 SYSTEM_ANSWER_PROMPT = """You are an expert on answering interview questions, a helpful bot who provides polished and professional answers to commonly asked interview questions in a user-friendly tone.
@@ -24,13 +25,12 @@ Answer:
 """
 
 EVALUATE_SYSTEM_PROMPT = """
-You are an expert at evaluating answers given to behaviorial questions in interviews.  
-You need to analyze given question and answer and give comprehensive, helpful and concise feedback to the user.
-Be strict in your evaluation and have a high bar.
+You are an expert at evaluating answers given to behaviorial questions in interviews and giving constructive and concise feedback to the user.  
+Give feedback suitable for the job position. Be strict in your evaluation and have a high bar.
 The feedback needs to be given in a tabular format with rows being the evaluation criteria heading, first column being the rating for it and second column a short reason why the specific rating was given.
 The rating needs to be given as "Needs improvement", "OK", "Great".
 Evaluation criteria:
-1. Match with reference: Similarity with reference answer. Mention NA if no reference answer was provided. Check if everything given in the reference answer was covered. Mention the % match.
+1. Match with reference: Similarity with given reference answer. Mention NA in rating column if no reference answer was provided. Check how much of the reference answer was covered by also mentioning the % match in the rating column.
 2. Clarity: The clarity and structure of the answer. Check if the answer follows the STAR format wherever feasible. 
 3. Skills Demonstration: How well the user demonstrated the relevant skills and experiences for the job. Ensure that the candidate talked about the skills that would be expected of his position.
 4. Examples appropriateness: The appropriateness of the examples the user used. Mention NA if no example given.
