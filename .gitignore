@@ -46,7 +46,12 @@ __pycache__/
 # C extensions
 *.so
 
-recordings/
+# Recordings
+recordings/*.mp3
+
+# Transcripts
+transcripts/*.txt
+
 temp/
 
 # Only include sample folder inside qna
@@ -62,5 +67,3 @@ qna/*
 .pkl
 data/*.pkl
 
-# Transcripts
-transcripts/*.txt
