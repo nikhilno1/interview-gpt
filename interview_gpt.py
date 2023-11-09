@@ -2,25 +2,14 @@ import streamlit as st
 import random
 import os
 from transcription import run_transcription_app, do_transcribe
-from create_question_folders import QUESTIONS_DATA, create_folders_for_questions
+from create_question_folders import create_folders_for_questions
+from config import QUESTIONS_DATA
 from evaluate_answer import evaluation_result
 
-question_data = []
-
-def create_qna_folders_and_options():
-    global question_data
-    # Parse the question data separated by | and then sort it alphabetically based on the second field (summary)
-    question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for item in QUESTIONS_DATA]
-    question_data.sort(key=lambda pair: pair[1])
-
-    directory_path = 'qna'
-    sub_dirs = os.listdir(directory_path)
-    folder_count = sum(os.path.isdir(os.path.join(directory_path, entry)) for entry in sub_dirs)
-    if folder_count <= 1:
-        create_folders_for_questions()
-    else:
-        print("QnA folders already setup")
-
+# Parse the question data separated by | and then sort it alphabetically based on the second field (summary)    
+question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for item in QUESTIONS_DATA]
+question_data.sort(key=lambda pair: pair[1])
+    
 def init_session_state():
     """Initialize the session state variables."""
     if 'selected_question' not in st.session_state:
@@ -68,11 +57,10 @@ def display_main_content(questions):
 # Main application logic
 def main():
     # Read the questions data and create qna folders for first time
-    create_qna_folders_and_options()
+    create_folders_for_questions()
 
     st.title("Welcome to Interview-GPT")
-    init_session_state()
-    
+    init_session_state()    
     
     _, extracted_words = zip(*question_data)
     display_sidebar(extracted_words)
