@@ -74,7 +74,9 @@ def pretty_print_conversation(messages):
 def generate_final_answer(question, rough_answer):
     chatgpt_answer_prepped = CHATGPT_ANSWER_PROMPT.format(
         QUESTION_HERE=question, ROUGH_ANSWER_HERE=rough_answer
-    )    
+    )
+    #print("chatgpt_answer_prepped", chatgpt_answer_prepped)
+
     final_answer = openai.ChatCompletion.create(
         model=CHAT_MODEL,
         messages=[{"role": "system", "content": SYSTEM_ANSWER_PROMPT+user_defined_prompt},

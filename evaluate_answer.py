@@ -36,7 +36,8 @@ def evaluation_result(actual_answer, selected_option):
              
         chat_messages = [{"role": "system", "content": EVALUATE_SYSTEM_PROMPT},
                          {"role": "user", "content": evaluate_answer_prepped}]
-                                  
+        #print("chat_messages", chat_messages)
+        
         compare_answer = openai.ChatCompletion.create(
             model=CHAT_MODEL,
             messages=chat_messages,
