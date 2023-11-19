@@ -24,7 +24,7 @@ def init_session_state():
 def display_sidebar(options):
     """Render the sidebar elements."""
     with st.sidebar:
-        st.title("Sidebar")
+        st.title("All Questions")
         expanded = st.checkbox("Interview Questions", True)
         if expanded:
             selected_option = st.radio("Select a question", options, index=0)

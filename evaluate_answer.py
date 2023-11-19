@@ -32,6 +32,7 @@ def evaluation_result(actual_answer, selected_option):
         evaluate_answer_prepped = EVALUATE_USER_PROMPT.format(
             JOB_TITLE=user_job_title, QUESTION_HERE=question, ACTUAL_ANSWER=actual_answer
         )
+        
         if len(reference_answer) > 10:
             evaluate_answer_prepped += REFERENCE_ANSWER_PROMPT.format(REFERENCE_ANSWER_HERE=reference_answer)
              
