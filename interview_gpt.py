@@ -76,6 +76,11 @@ def init_session_state():
     if 'final_answer_text' not in st.session_state:
         st.session_state.final_answer_text = ""            
 
+def reset_fields():    
+    st.session_state.rough_answer_text = "" 
+    st.session_state.chatgpt_answer_text = ""
+    st.session_state.final_answer_text = ""
+
 def display_sidebar(options):
     """Render the sidebar elements."""
     with st.sidebar:
@@ -84,12 +89,11 @@ def display_sidebar(options):
         if expanded:
             selected_option = st.radio("Select a question", options, index=0)
             idx = options.index(selected_option)
-            st.session_state.selected_question = question_data[idx][0]
+            st.session_state.selected_question = question_data[idx][0]            
             if selected_option != st.session_state.prev_selected_question:
+                reset_fields()
                 st.session_state.prev_selected_question = selected_option
-                st.session_state.rough_answer_text = "" 
-                st.session_state.chatgpt_answer_text = ""
-                st.session_state.final_answer_text = ""
+                
                 #print("Resetted all state variables")
 
 
@@ -203,13 +207,13 @@ def display_main_content(questions):
     """Render the main page of the application."""
 
     if st.button("Pick a Random Question"):
-        selected_question = random.choice(questions)
-        
+        selected_question = random.choice(questions)        
         # Don't select the same question twice
         while selected_question == st.session_state.selected_question:
             selected_question = random.choice(questions)
         st.session_state.selected_question = selected_question
         st.session_state.random_button_pressed = True
+        reset_fields()
     else:
         st.session_state.random_button_pressed = False
     
