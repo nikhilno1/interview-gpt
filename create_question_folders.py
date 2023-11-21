@@ -15,7 +15,7 @@ def write_question_data(folder_path, question_text):
     with open(question_file_path, 'w') as f:
         f.write(question_text)
 
-def create_folders_for_questions():
+def create_folders_for_questions():    
     # Base directory where folders will be created
     base_dir = "qna"
 
@@ -31,7 +31,7 @@ def create_folders_for_questions():
         folder_name = split_parts[-1].strip()
         folder_path = os.path.join(base_dir, folder_name)
         
-        # Create the folder
+        # Create the folder if it doesn't already exist
         if not os.path.exists(folder_path):
             os.mkdir(folder_path)
             create_files_inside_folder(folder_path)   
