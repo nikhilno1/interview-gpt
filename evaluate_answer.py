@@ -23,19 +23,22 @@ def get_qna_content(selected_option, file_name):
 
     return content
 
-def evaluation_result(actual_answer, selected_option):
+def evaluation_result(actual_answer, selected_option, reference_answer=""):
     st.header("Analysis")
-    with st.spinner("Evaluating your answer..."):    
+    with st.spinner("Evaluating your answer..."):        
         question = get_qna_content(selected_option, ALL_FILE_NAMES[0])
-        reference_answer = get_qna_content(selected_option, ALL_FILE_NAMES[3])
-
+        if (reference_answer == ""):
+            reference_answer = get_qna_content(selected_option, ALL_FILE_NAMES[3])
+        
         evaluate_answer_prepped = EVALUATE_USER_PROMPT.format(
             JOB_TITLE=user_job_title, QUESTION_HERE=question, ACTUAL_ANSWER=actual_answer
         )
         
         if len(reference_answer) > 10:
             evaluate_answer_prepped += REFERENCE_ANSWER_PROMPT.format(REFERENCE_ANSWER_HERE=reference_answer)
-             
+        
+        #print("EVALUATE_SYSTEM_PROMPT=", EVALUATE_SYSTEM_PROMPT)
+        #print("evaluate_answer_prepped=", evaluate_answer_prepped)
         chat_messages = [{"role": "system", "content": EVALUATE_SYSTEM_PROMPT},
                          {"role": "user", "content": evaluate_answer_prepped}]
         #print("chat_messages", chat_messages)

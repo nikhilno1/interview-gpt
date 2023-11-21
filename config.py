@@ -57,6 +57,7 @@ However this is the ideal or reference answer I would have liked to provide:
 
 ALL_FILE_NAMES = ["0-question.txt", "1-rough-answer.txt", "2-chatgpt-answer.txt", "3-final-answer.txt"]
 QNA_FOLDER = "qna"
+QNA_DICT_FILE_PATH = 'data/qna_dict.pkl'
 
 QUESTIONS_DATA = [
     "Tell me about yourself. | Self-introduction",
