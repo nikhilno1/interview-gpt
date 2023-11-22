@@ -1,7 +1,7 @@
 ##### Interview GPT is a generative AI application to help you prepare for behavioral interviews at top companies.
 
                 
-### Usage
+#### Usage
 
 Step 1 (Optional) - Provide the details about the position you are interviewing for such as Job Title, Years of Experience and Interview Company name 
 
