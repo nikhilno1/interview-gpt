@@ -7,6 +7,11 @@ from config import *
 from evaluate_answer import evaluation_result
 from generate_answers import generate_chatgpt_answer, qna_dict, read_qna_dict_from_file
 
+st.set_page_config(
+    page_title="Interview GPT",
+    page_icon="📝",
+)
+
 # Parse the question data separated by | and then sort it alphabetically based on the second field (summary)    
 question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for item in QUESTIONS_DATA]
 question_data.sort(key=lambda pair: pair[1])
@@ -251,7 +256,7 @@ def main():
         read_qna_data()
         st.session_state.initialization_done = True
 
-    st.title("Welcome to Interview-GPT")       
+    st.title("Welcome to Interview GPT")       
     _, extracted_words = zip(*question_data)
     display_sidebar(extracted_words)
     display_main_content([pair[0] for pair in question_data])
