@@ -3,7 +3,7 @@ import random
 import os, json
 from transcription import run_transcription_app, do_transcribe
 from create_question_folders import create_folders_for_questions
-from config import QUESTIONS_DATA, QNA_FOLDER, ALL_FILE_NAMES
+from config import *
 from evaluate_answer import evaluation_result
 from generate_answers import generate_chatgpt_answer, qna_dict, read_qna_dict_from_file
 
@@ -130,7 +130,7 @@ def save_answer_to_file(directory, folder, filename, content=""):
     # update dictionary as well for the saved folder
     read_qna_data(folder) 
 
-def display_qna_widgets():
+def display_qna_widgets(user_dict):
     #global qna_dict
 
     selected_option = get_selected_folder_from_question(st.session_state.selected_question)
@@ -159,7 +159,7 @@ def display_qna_widgets():
         rough_answer_save = st.button('Save', key='rough_answer_save')
     
     if rough_answer_submit:
-        chatgpt_answer = generate_chatgpt_answer(st.session_state.selected_question, rough_answer)
+        chatgpt_answer = generate_chatgpt_answer(st.session_state.selected_question, rough_answer, user_dict)
         st.session_state.rough_answer_text = rough_answer
         st.session_state.chatgpt_answer_text = chatgpt_answer
 
@@ -206,6 +206,17 @@ def display_qna_widgets():
 def display_main_content(questions):
     """Render the main page of the application."""
 
+    user_dict = {}
+    # Show user input fields
+    col1, col2, col3 = st.columns([1, .5, 1])
+    with col1:
+        user_dict["title"] = st.text_input('Job Title', DEFAULT_JOB_TITLE)
+    with col2:
+        user_dict["years"] = st.text_input('Years of Experience', DEFAULT_EXPERIENCE)
+    with col3:
+        user_dict["company"] = st.text_input('Interviewing Company', DEFAULT_COMPANY)    
+    st.markdown("---")
+
     if st.button("Pick a Random Question"):
         selected_question = random.choice(questions)        
         # Don't select the same question twice
@@ -220,14 +231,14 @@ def display_main_content(questions):
     if st.session_state.selected_question:
         st.header(st.session_state.selected_question)
         
-        display_qna_widgets()       
+        display_qna_widgets(user_dict)       
         run_transcription_app()        
 
         if st.button('Analyze', key='analyze', disabled=st.session_state.get("analyze_button_disable", True)):
             transcription = do_transcribe()
             #selected_option = [pair[1] for pair in question_data if pair[0] == st.session_state.selected_question][0]
             selected_option = get_selected_folder_from_question(st.session_state.selected_question)
-            eval_result = evaluation_result(transcription, selected_option, st.session_state.final_answer_text)
+            eval_result = evaluation_result(transcription, selected_option, st.session_state.final_answer_text, user_dict)
             st.write(eval_result)
             st.session_state.analyze_button_disable = True            
 
@@ -243,7 +254,6 @@ def main():
     st.title("Welcome to Interview-GPT")       
     _, extracted_words = zip(*question_data)
     display_sidebar(extracted_words)
-
     display_main_content([pair[0] for pair in question_data])
 
 if __name__ == '__main__':

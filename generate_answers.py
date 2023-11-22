@@ -2,7 +2,7 @@ from langchain.prompts import BaseChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from typing import List, Union
 import openai
-from config import CHAT_MODEL, SYSTEM_ANSWER_PROMPT, CHATGPT_ANSWER_PROMPT, ALL_FILE_NAMES, QNA_FOLDER, QNA_DICT_FILE_PATH
+from config import *
 import streamlit as st
 
 import json
@@ -13,12 +13,6 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env.local")
 openai.api_key = os.getenv("OPENAI_API_KEY", "")
-
-user_defined_prompt = os.getenv("USER_DEFINED_PROMPT", "")
-if user_defined_prompt == "":
-    user_defined_prompt = st.secrets["OPENAI_API_KEY"]
-
-# Path to the pickle file
 
 qna_dict = {}
 def read_qna_dict_from_file():
@@ -76,11 +70,20 @@ def pretty_print_conversation(messages):
         elif message["role"] == "function":
             print(colored(f"function ({message['name']}): {message['content']}\n", role_to_color[message["role"]]))
 
-def generate_chatgpt_answer(question, rough_answer):
+def generate_chatgpt_answer(question, rough_answer, user_dict={}):
     chatgpt_answer_prepped = CHATGPT_ANSWER_PROMPT.format(
         QUESTION_HERE=question, ROUGH_ANSWER_HERE=rough_answer
-    )
-    #print("chatgpt_answer_prepped", chatgpt_answer_prepped)
+    )    
+
+    if(user_dict != {}):
+        user_defined_prompt = USER_DEFINED_PROMPT.format(
+                NUM_EXPERIENCE=user_dict["years"], JOB_TITLE=user_dict["title"], COMPANY=user_dict["company"], 
+        )
+    else:
+        user_defined_prompt = USER_DEFINED_PROMPT.format(
+            NUM_EXPERIENCE=DEFAULT_EXPERIENCE, JOB_TITLE=DEFAULT_JOB_TITLE, COMPANY=DEFAULT_COMPANY 
+        )    
+    #print("user_defined_prompt", user_defined_prompt)
 
     final_answer = openai.ChatCompletion.create(
         model=CHAT_MODEL,
@@ -113,7 +116,7 @@ def generate_all_answers(directory):
                     #print("Call ChatGPT API only if there is change in question or rough answer", dir)
                     
                     print("Getting ChatGPT answer for", dir)
-                    chatgpt_answer = generate_chatgpt_answer(question, rough_answer)
+                    chatgpt_answer = generate_chatgpt_answer(question, rough_answer, )
                     # print(chatgpt_answer)
 
                     with open( file_path + ALL_FILE_NAMES[2], 'w') as file:

@@ -2,12 +2,19 @@
 #CHAT_MODEL = "gpt-4-0613"
 CHAT_MODEL = "gpt-4-1106-preview"
 EMBEDDINGS_MODEL = "text-embedding-ada-002"
+
+DEFAULT_JOB_TITLE = "Engineering Manager"
+DEFAULT_EXPERIENCE = "15"
+DEFAULT_COMPANY = "Google"
+
 # Set up the base template
 SYSTEM_ANSWER_PROMPT = """You are an expert on answering interview questions, a helpful bot who provides polished and professional answers to commonly asked interview questions in a user-friendly tone.
 Your task is to understand the question, take the rough answer provided by the user and then enhance the rough answer to a proper detailed answer.
 The rough answer will capture key points that you need to expand on. But take care that you provide realistic human-like answers and not canned responses typically provided by a language model. Don't use heavy words that are not typically used in human conversations.
-Provide the answer in STAR format - Situation, Task, Action and Result but don't use the labels - Situation, Task, Action or Result - to identify the parts of the answer.
+Provide the answer in STAR format - Situation, Task, Action and Result but don't use the labels - Situation, Task, Action or Result - to identify the parts of the answer. 
 """
+
+USER_DEFINED_PROMPT = "You are doing this for someone with {NUM_EXPERIENCE} years of experience in IT working as {JOB_TITLE} for job at {COMPANY}, so provide your answers accordingly."
 
 # Build a prompt to provide the original query, the result and ask to summarise for the user
 CHATGPT_ANSWER_PROMPT = """Use the content to answer the question asked by the user.
@@ -42,12 +49,13 @@ Below the table also provide these tips to improve the answer:
 2. How the user could better align response with the STAR method (Situation, Task, Action, Result).
 3. Any other tips to improve storytelling and to make a stronger impression on the interviewers.
 
-Lastly, provide the most appropriate answer that you can think of based on everything you know about the user.
+Lastly, provide the most appropriate answer that you can think of based on everything you know about the user's designation, number of years of experience and interviewing company.
 
 """
 
 EVALUATE_USER_PROMPT = """
-I have recently had an interview for {JOB_TITLE} position where I was asked the following behavioral question: {QUESTION_HERE}. Below is the response I provided: {ACTUAL_ANSWER}. 
+I have recently had an interview for {JOB_TITLE} position at {COMPANY} where I was asked the following behavioral question: {QUESTION_HERE}. Below is the response I provided: {ACTUAL_ANSWER}. 
+I have {NUM_EXPERIENCE} years of experience.
 """
 
 REFERENCE_ANSWER_PROMPT = """
