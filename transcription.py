@@ -17,16 +17,36 @@ def transcribe(audio_file):
     transcript = openai.Audio.transcribe("whisper-1", audio_file, language="en")
     return transcript
 
-def save_audio_file(audio_bytes, file_extension):
+def remove_files_with_prefix(directory_path, prefix):
+    try:
+        # Check if the directory exists
+        if os.path.exists(directory_path):
+            # Iterate through all the items in the directory
+            for item in os.listdir(directory_path):
+                item_path = os.path.join(directory_path, item)
+                
+                # Check if the item is a file and starts with the specified prefix
+                if os.path.isfile(item_path) and item.startswith(prefix):
+                    # Remove the file
+                    os.remove(item_path)
+        else:
+            print(f"The directory '{directory_path}' does not exist.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+def save_audio_file(audio_bytes, file_extension, recordings_folder):
     """
     Save audio bytes to a file with the specified extension.
 
     :param audio_bytes: Audio data in bytes
     :param file_extension: The extension of the output audio file
     :return: The name of the saved audio file
-    """
+    """    
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    file_name = f"recordings/audio_{timestamp}.{file_extension}"
+    file_name = f"{recordings_folder}/audio_{timestamp}.{file_extension}"
+    #print("recording path", file_name)
+
+    remove_files_with_prefix(recordings_folder, "audio_")
 
     with open(file_name, "wb") as f:
         f.write(audio_bytes)
@@ -34,20 +54,22 @@ def save_audio_file(audio_bytes, file_extension):
     return file_name
 
 
-def transcribe_audio(file_path):
+def transcribe_audio(file_path, transcripts_folder):
     """
     Transcribe the audio file at the specified path.
 
     :param file_path: The path of the audio file to transcribe
     :return: The transcribed text
     """
+    remove_files_with_prefix(transcripts_folder, "ts_")
+
     with open(file_path, "rb") as audio_file:
         transcript = transcribe(audio_file)
 
     return transcript["text"]
 
 
-def run_transcription_app():
+def run_transcription_app(recordings_folder):
     """
     Main function to run the Transcription app.
     """
@@ -59,13 +81,13 @@ def run_transcription_app():
     audio_bytes = audio_recorder(energy_threshold=(-1.0, 1.0),  pause_threshold=120.0)
     if audio_bytes:
         st.audio(audio_bytes, format="audio/wav")
-        save_audio_file(audio_bytes, "mp3")
+        save_audio_file(audio_bytes, "mp3", recordings_folder)
         st.session_state.analyze_button_disable = False            
 
 
-def do_transcribe():
+def do_transcribe(recordings_folder, transcripts_folder):
     # Find the newest audio file
-    subdirectory_path = os.path.join(".", "recordings")
+    subdirectory_path = os.path.join(".", recordings_folder)    
 
     audio_file_path = max(
         [os.path.join(subdirectory_path, f) for f in os.listdir(subdirectory_path) if f.startswith("audio")],
@@ -73,7 +95,7 @@ def do_transcribe():
     )
 
     # Transcribe the audio file
-    transcript_text = transcribe_audio(audio_file_path)
+    transcript_text = transcribe_audio(audio_file_path, transcripts_folder)
 
     # Display the transcript
     st.header("Transcript")
@@ -81,7 +103,7 @@ def do_transcribe():
     
     # Save the transcript to a text file    
     a_file = os.path.splitext(os.path.basename(audio_file_path))[0]
-    with open("transcripts/ts_" + a_file + ".txt", "w") as f:
+    with open(transcripts_folder + "/ts_" + a_file + ".txt", "w") as f:
         f.write(transcript_text)
         
     return transcript_text

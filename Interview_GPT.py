@@ -1,20 +1,72 @@
 import streamlit as st
-import random
-import os, json
+from streamlit import runtime
+from streamlit.runtime.scriptrunner import get_script_run_ctx
+import extra_streamlit_components as stx
+import random, os, json
 from transcription import run_transcription_app, do_transcribe
 from create_question_folders import create_folders_for_questions
 from config import *
 from evaluate_answer import evaluation_result
-from generate_answers import generate_chatgpt_answer, qna_dict, read_qna_dict_from_file
+from generate_answers import generate_chatgpt_answer, qna_dict
 
 st.set_page_config(
     page_title="Interview GPT",
     page_icon="📝",
 )
 
+# @st.cache_resource(experimental_allow_widgets=True)
+# def get_manager():
+#     return stx.CookieManager()
+
+# cookie_manager = get_manager()
+# cookies = cookie_manager.get_all()
+
+#st.write(st.experimental_user)
+def get_remote_ip() -> str:
+    """Get remote ip."""
+
+    try:
+        ctx = get_script_run_ctx()
+        if ctx is None:
+            return None
+
+        session_info = runtime.get_instance().get_client(ctx.session_id)
+        if session_info is None:
+            return None
+    except Exception as e:
+        return None
+
+    return session_info.request.remote_ip
+
+def create_folder(folder_path):
+    # Check if the folder already exists
+    if not os.path.exists(folder_path):
+        # Create the folder
+        os.makedirs(folder_path)
+        print(f"Folder '{folder_path}' created successfully.")
+    else:
+        print(f"Folder '{folder_path}' already exists.")
+
 # Parse the question data separated by | and then sort it alphabetically based on the second field (summary)    
 question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for item in QUESTIONS_DATA]
 question_data.sort(key=lambda pair: pair[1])
+
+unique_user_id = get_remote_ip()
+
+#if "ajs_anonymous_id" in cookies:
+#    unique_user_id = cookies["ajs_anonymous_id"] + "-" + get_remote_ip()     
+
+recordings_folder = "recordings/" + unique_user_id
+transcripts_folder = "transcripts/" + unique_user_id
+
+def create_folders_for_user_data():
+    global recordings_folder, transcripts_folder
+    #create_folder(qna_dict_folder)    
+    create_folder(recordings_folder)    
+    create_folder(transcripts_folder)
+
+#qna_dict_file_path = qna_dict_folder + '/qna_dict.pkl'
+#print(qna_dict_file_path)
 
 def read_qna_data(single_folder=""):    
     global qna_dict
@@ -53,7 +105,7 @@ def read_qna_data(single_folder=""):
             }
             qna_dict[dir] = json.dumps(json_data)     
             #print("qna_dict updated for ", qna_dict[dir])       
-    print("qna_dict generated")        
+    print("qna_dict generated.")        
 
 def init_session_state():
     """Initialize the session state variables."""
@@ -237,10 +289,10 @@ def display_main_content(questions):
         st.header(st.session_state.selected_question)
         
         display_qna_widgets(user_dict)       
-        run_transcription_app()        
+        run_transcription_app(recordings_folder)        
 
         if st.button('Analyze', key='analyze', disabled=st.session_state.get("analyze_button_disable", True)):
-            transcription = do_transcribe()
+            transcription = do_transcribe(recordings_folder, transcripts_folder)
             #selected_option = [pair[1] for pair in question_data if pair[0] == st.session_state.selected_question][0]
             selected_option = get_selected_folder_from_question(st.session_state.selected_question)
             eval_result = evaluation_result(transcription, selected_option, st.session_state.final_answer_text, user_dict)
@@ -252,7 +304,8 @@ def main():
     init_session_state()    
     # Read the questions data and create qna folders for first time
     if st.session_state.initialization_done is False:
-        create_folders_for_questions()    
+        create_folders_for_questions()
+        create_folders_for_user_data()
         read_qna_data()
         st.session_state.initialization_done = True
 

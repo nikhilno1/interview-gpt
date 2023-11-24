@@ -17,11 +17,11 @@ openai.api_key = os.getenv("OPENAI_API_KEY", "")
 qna_dict = {}
 def read_qna_dict_from_file():
     global qna_dict
-    #global qna_dict_file_path
+    global qna_dict_file_path
     # Try to load the pickle file if it exists
     try:
-        if os.path.exists(QNA_DICT_FILE_PATH):
-            with open(QNA_DICT_FILE_PATH, 'rb') as qna_dict_file:
+        if os.path.exists(qna_dict_file_path):
+            with open(qna_dict_file_path, 'rb') as qna_dict_file:
                 qna_dict = pickle.load(qna_dict_file)
                 print("qna_dict file loaded successfully.")
         else:
@@ -34,17 +34,17 @@ def read_qna_dict_from_file():
 
 def write_qna_dict_to_file():
     global qna_dict
-    #global qna_dict_file_path
+    global qna_dict_file_path
     try:
-        with open(QNA_DICT_FILE_PATH, 'wb') as qna_dict_file:
+        with open(qna_dict_file_path, 'wb') as qna_dict_file:
             pickle.dump(qna_dict, qna_dict_file)    
-            print(f"QnA data successfully saved to {QNA_DICT_FILE_PATH}")
+            print(f"QnA data successfully saved to {qna_dict_file_path}")
             #print(f"{qna_dict}")
 
     except FileNotFoundError:
-        print(f"File not found: {QNA_DICT_FILE_PATH}")
+        print(f"File not found: {qna_dict_file_path}")
     except IOError:
-        print(f"IOError: Failed to save data to {QNA_DICT_FILE_PATH}")
+        print(f"IOError: Failed to save data to {qna_dict_file_path}")
     except pickle.PicklingError:
         print("PicklingError: Failed to pickle data.")
     except Exception as e:
