@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit import runtime
 from streamlit.runtime.scriptrunner import get_script_run_ctx
-import extra_streamlit_components as stx
+#import extra_streamlit_components as stx
 import random, os, json
 from transcription import run_transcription_app, do_transcribe
 from create_question_folders import create_folders_for_questions
