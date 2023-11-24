@@ -52,6 +52,7 @@ question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for i
 question_data.sort(key=lambda pair: pair[1])
 
 unique_user_id = get_remote_ip()
+st.write(f'Your IP: {unique_user_id}')
 
 #if "ajs_anonymous_id" in cookies:
 #    unique_user_id = cookies["ajs_anonymous_id"] + "-" + get_remote_ip()     
