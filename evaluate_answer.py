@@ -9,12 +9,12 @@ from dotenv import load_dotenv
 # if user_job_title == "":
 #     user_job_title = st.secrets["USER_JOB_TITLE"]
 
-def get_qna_content(selected_option, file_name):
+def get_qna_content(qna_folder_path, selected_option, file_name):    
     # Construct the full path to the file
     if selected_option is None:
         st.write ("No option has been selected!")
     else:
-        file_path = os.path.join(QNA_FOLDER, selected_option, file_name)
+        file_path = os.path.join(qna_folder_path, selected_option, file_name)
            
     # Open and read the file
     with open(file_path, 'r') as file:
@@ -23,12 +23,12 @@ def get_qna_content(selected_option, file_name):
 
     return content
 
-def evaluation_result(actual_answer, selected_option, reference_answer="", user_dict={}):
+def evaluation_result(qna_folder_path, actual_answer, selected_option, reference_answer="", user_dict={}):
     st.header("Analysis")
     with st.spinner("Evaluating your answer..."):        
-        question = get_qna_content(selected_option, ALL_FILE_NAMES[0])
+        question = get_qna_content(qna_folder_path, selected_option, ALL_FILE_NAMES[0])
         if (reference_answer == ""):
-            reference_answer = get_qna_content(selected_option, ALL_FILE_NAMES[3])
+            reference_answer = get_qna_content(qna_folder_path, selected_option, ALL_FILE_NAMES[3])
         
         if(user_dict != {}):
             evaluate_answer_prepped = EVALUATE_USER_PROMPT.format(

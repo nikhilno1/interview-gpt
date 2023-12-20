@@ -135,7 +135,7 @@ def generate_all_answers(directory):
 # Main application logic
 def main():
     read_qna_dict_from_file()
-    generate_all_answers(QNA_FOLDER)
+    generate_all_answers("qna")
     write_qna_dict_to_file()
 
 if __name__ == '__main__':

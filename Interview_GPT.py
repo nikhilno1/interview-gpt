@@ -30,20 +30,20 @@ def create_folder(folder_path):
         # Create the folder
         os.makedirs(folder_path)
         print(f"Folder '{folder_path}' created successfully.")
-    else:
-        print(f"Folder '{folder_path}' already exists.")
+    # else:
+    #     print(f"Folder '{folder_path}' already exists.")
 
 def create_folders_for_user_data():
-    global recordings_folder, transcripts_folder
+    global g_recordings_folder, g_transcripts_folder
     #create_folder(qna_dict_folder)    
-    create_folder(recordings_folder)    
-    create_folder(transcripts_folder)
-    create_folder(QNA_FOLDER)
+    create_folder(g_recordings_folder)    
+    create_folder(g_transcripts_folder)
+    create_folder(g_qna_folder)
 
 def read_qna_data(single_folder=""):    
     global qna_dict
     question = rough_answer = chatgpt_answer = ""
-    for root, dirs, files in os.walk(QNA_FOLDER):
+    for root, dirs, files in os.walk(g_qna_folder):
         if dirs == []:
             continue        
         if single_folder != "":
@@ -77,7 +77,7 @@ def read_qna_data(single_folder=""):
             }
             qna_dict[dir] = json.dumps(json_data)     
             #print("qna_dict updated for ", qna_dict[dir])       
-    print("qna_dict generated.")        
+    #print("qna_dict generated.")        
 
 def reset_fields():    
     st.session_state.rough_answer_text = "" 
@@ -168,7 +168,7 @@ def display_qna_widgets(user_dict):
 
     if rough_answer_save:        
         st.session_state.rough_answer_text = rough_answer 
-        save_answer_to_file(QNA_FOLDER, selected_option, ALL_FILE_NAMES[1], rough_answer)
+        save_answer_to_file(g_qna_folder, selected_option, ALL_FILE_NAMES[1], rough_answer)
     # =========================================================================================== #
     chatgpt_answer = st.text_area("ChatGPT refined answer:", value=st.session_state.chatgpt_answer_text, height=200)    
     col1, col2 = st.columns([.2, 1])
@@ -185,7 +185,7 @@ def display_qna_widgets(user_dict):
     
     if chatgpt_answer_save:
         st.session_state.chatgpt_answer_text = chatgpt_answer 
-        save_answer_to_file(QNA_FOLDER, selected_option, ALL_FILE_NAMES[2], chatgpt_answer)
+        save_answer_to_file(g_qna_folder, selected_option, ALL_FILE_NAMES[2], chatgpt_answer)
 
     # =========================================================================================== #
     final_answer = st.text_area("Final answer:", value=st.session_state.final_answer_text, height=200)
@@ -204,7 +204,7 @@ def display_qna_widgets(user_dict):
 
     if final_answer_save:
         st.session_state.final_answer_text = final_answer 
-        save_answer_to_file(QNA_FOLDER, selected_option, ALL_FILE_NAMES[3], final_answer)  
+        save_answer_to_file(g_qna_folder, selected_option, ALL_FILE_NAMES[3], final_answer)  
 
 def display_main_content(questions):
     """Render the main page of the application."""
@@ -235,13 +235,13 @@ def display_main_content(questions):
         st.header(st.session_state.selected_question)
         
         display_qna_widgets(user_dict)       
-        run_transcription_app(recordings_folder)        
+        run_transcription_app(g_recordings_folder)        
 
         if st.button('Analyze', key='analyze', disabled=st.session_state.get("analyze_button_disable", True)):
-            transcription = do_transcribe(recordings_folder, transcripts_folder)
+            transcription = do_transcribe(g_recordings_folder, g_transcripts_folder)
             #selected_option = [pair[1] for pair in question_data if pair[0] == st.session_state.selected_question][0]
             selected_option = get_selected_folder_from_question(st.session_state.selected_question)
-            eval_result = evaluation_result(transcription, selected_option, st.session_state.final_answer_text, user_dict)
+            eval_result = evaluation_result(g_qna_folder, transcription, selected_option, st.session_state.final_answer_text, user_dict)
             st.write(eval_result)
             st.session_state.analyze_button_disable = True            
 
@@ -273,16 +273,16 @@ def init_session_state():
 
 # Main application logic
 def main():
-    global QNA_FOLDER, recordings_folder, transcripts_folder
+    global g_qna_folder, g_recordings_folder, g_transcripts_folder
 
     init_session_state()    
     unique_user_id = get_user_email().replace("@gmail.com", "")
+    
+    g_qna_folder = "qna/" + unique_user_id
+    g_recordings_folder = "recordings/" + unique_user_id
+    g_transcripts_folder = "transcripts/" + unique_user_id
 
-    QNA_FOLDER = QNA_FOLDER + "/" + unique_user_id
-    recordings_folder = "recordings/" + unique_user_id
-    transcripts_folder = "transcripts/" + unique_user_id
-
-    create_folders_for_questions(QNA_FOLDER)
+    create_folders_for_questions(g_qna_folder)
     create_folders_for_user_data()
     read_qna_data()
     
