@@ -50,7 +50,7 @@ Below the table also provide these tips to improve the answer:
 2. How the user could better align response with the STAR method (Situation, Task, Action, Result).
 3. Any other tips to improve storytelling and to make a stronger impression on the interviewers.
 
-Lastly, provide the most appropriate answer that you can think of based on everything you know about the user's designation, number of years of experience and interviewing company.
+Lastly, provide the most appropriate well-formatted answer that you can think of based on everything you know about the user's designation, number of years of experience and interviewing company.
 
 """
 
