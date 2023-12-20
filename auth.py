@@ -14,6 +14,19 @@ AUTHORIZE_ENDPOINT = os.getenv("AUTHORIZE_ENDPOINT", "")
 TOKEN_ENDPOINT = os.getenv("TOKEN_ENDPOINT", "")
 REVOKE_ENDPOINT = os.getenv("REVOKE_ENDPOINT", "")
 
+#TODO - Fix this to handle for both - local and streamlit cloud deployment
+if CLIENT_ID == "":
+    CLIENT_ID = st.secrets["CLIENT_ID"]
+if CLIENT_SECRET == "":
+    CLIENT_SECRET = st.secrets["CLIENT_SECRET"]
+if REDIRECT_URI == "":
+    REDIRECT_URI = st.secrets["REDIRECT_URI"]
+if AUTHORIZE_ENDPOINT == "":
+    AUTHORIZE_ENDPOINT = st.secrets["AUTHORIZE_ENDPOINT"]
+if TOKEN_ENDPOINT == "":
+    TOKEN_ENDPOINT = st.secrets["TOKEN_ENDPOINT"]
+if REVOKE_ENDPOINT == "":
+    REVOKE_ENDPOINT = st.secrets["REVOKE_ENDPOINT"]                    
 
 def authenticate_user():
     if "auth" not in st.session_state:
