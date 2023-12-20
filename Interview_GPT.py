@@ -1,5 +1,6 @@
 import streamlit as st
 import random, os, json
+import time
 
 from transcription import run_transcription_app, do_transcribe
 from create_question_folders import create_folders_for_questions
@@ -241,8 +242,12 @@ def display_main_content(questions):
             transcription = do_transcribe(g_recordings_folder, g_transcripts_folder)
             #selected_option = [pair[1] for pair in question_data if pair[0] == st.session_state.selected_question][0]
             selected_option = get_selected_folder_from_question(st.session_state.selected_question)
+            start_time = time.time()
             eval_result = evaluation_result(g_qna_folder, transcription, selected_option, st.session_state.final_answer_text, user_dict)
+            end_time = time.time()
+            time_taken = int(end_time - start_time)
             st.write(eval_result)
+            st.write(f"*Time taken: {time_taken} seconds*")
             st.session_state.analyze_button_disable = True            
 
 def init_session_state():
