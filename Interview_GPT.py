@@ -1,42 +1,28 @@
 import streamlit as st
-from streamlit import runtime
-from streamlit.runtime.scriptrunner import get_script_run_ctx
-#import extra_streamlit_components as stx
 import random, os, json
+
 from transcription import run_transcription_app, do_transcribe
 from create_question_folders import create_folders_for_questions
 from config import *
 from evaluate_answer import evaluation_result
 from generate_answers import generate_chatgpt_answer, qna_dict
+from auth import authenticate_user
 
 st.set_page_config(
     page_title="Interview GPT",
     page_icon="📝",
 )
 
-# @st.cache_resource(experimental_allow_widgets=True)
-# def get_manager():
-#     return stx.CookieManager()
+# Parse the question data separated by | and then sort it alphabetically based on the second field (summary)    
+question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for item in QUESTIONS_DATA]
+question_data.sort(key=lambda pair: pair[1])
 
-# cookie_manager = get_manager()
-# cookies = cookie_manager.get_all()
-
-#st.write(st.experimental_user)
-def get_remote_ip() -> str:
-    """Get remote ip."""
-
-    try:
-        ctx = get_script_run_ctx()
-        if ctx is None:
-            return None
-
-        session_info = runtime.get_instance().get_client(ctx.session_id)
-        if session_info is None:
-            return None
-    except Exception as e:
-        return None
-
-    return session_info.request.remote_ip
+def get_user_email() -> str:
+    """Get logged in user email."""
+    if "auth" in st.session_state:
+        return st.session_state["auth"]
+    else:    
+        return "guest"
 
 def create_folder(folder_path):
     # Check if the folder already exists
@@ -47,27 +33,12 @@ def create_folder(folder_path):
     else:
         print(f"Folder '{folder_path}' already exists.")
 
-# Parse the question data separated by | and then sort it alphabetically based on the second field (summary)    
-question_data = [(item.split('|')[0].strip(), item.split('|')[-1].strip()) for item in QUESTIONS_DATA]
-question_data.sort(key=lambda pair: pair[1])
-
-unique_user_id = get_remote_ip()
-#st.write(f'Your IP: {unique_user_id}')
-
-#if "ajs_anonymous_id" in cookies:
-#    unique_user_id = cookies["ajs_anonymous_id"] + "-" + get_remote_ip()     
-
-recordings_folder = "recordings/" + unique_user_id
-transcripts_folder = "transcripts/" + unique_user_id
-
 def create_folders_for_user_data():
     global recordings_folder, transcripts_folder
     #create_folder(qna_dict_folder)    
     create_folder(recordings_folder)    
     create_folder(transcripts_folder)
-
-#qna_dict_file_path = qna_dict_folder + '/qna_dict.pkl'
-#print(qna_dict_file_path)
+    create_folder(QNA_FOLDER)
 
 def read_qna_data(single_folder=""):    
     global qna_dict
@@ -107,32 +78,6 @@ def read_qna_data(single_folder=""):
             qna_dict[dir] = json.dumps(json_data)     
             #print("qna_dict updated for ", qna_dict[dir])       
     print("qna_dict generated.")        
-
-def init_session_state():
-    """Initialize the session state variables."""
-    if 'initialization_done' not in st.session_state:
-        st.session_state.initialization_done = False
-
-    if 'selected_question' not in st.session_state:
-        st.session_state.selected_question = None
-
-    if 'prev_selected_question' not in st.session_state:
-        st.session_state.prev_selected_question = None
-
-    if 'random_button_pressed' not in st.session_state:
-        st.session_state.random_button_pressed = False
-
-    if 'analyze_button_disable' not in st.session_state:
-        st.session_state.analyze_button_disable = True        
-
-    if 'rough_answer_text' not in st.session_state:
-        st.session_state.rough_answer_text = ""    
-
-    if 'chatgpt_answer_text' not in st.session_state:
-        st.session_state.chatgpt_answer_text = ""
-
-    if 'final_answer_text' not in st.session_state:
-        st.session_state.final_answer_text = ""            
 
 def reset_fields():    
     st.session_state.rough_answer_text = "" 
@@ -300,16 +245,51 @@ def display_main_content(questions):
             st.write(eval_result)
             st.session_state.analyze_button_disable = True            
 
+def init_session_state():
+    """Initialize the session state variables."""
+    if 'initialization_done' not in st.session_state:
+        st.session_state.initialization_done = False
+
+    if 'selected_question' not in st.session_state:
+        st.session_state.selected_question = None
+
+    if 'prev_selected_question' not in st.session_state:
+        st.session_state.prev_selected_question = None
+
+    if 'random_button_pressed' not in st.session_state:
+        st.session_state.random_button_pressed = False
+
+    if 'analyze_button_disable' not in st.session_state:
+        st.session_state.analyze_button_disable = True        
+
+    if 'rough_answer_text' not in st.session_state:
+        st.session_state.rough_answer_text = ""    
+
+    if 'chatgpt_answer_text' not in st.session_state:
+        st.session_state.chatgpt_answer_text = ""
+
+    if 'final_answer_text' not in st.session_state:
+        st.session_state.final_answer_text = ""    
+
 # Main application logic
 def main():
-    init_session_state()    
-    # Read the questions data and create qna folders for first time
-    if st.session_state.initialization_done is False:
-        create_folders_for_questions()
-        create_folders_for_user_data()
-        read_qna_data()
-        st.session_state.initialization_done = True
+    global QNA_FOLDER, recordings_folder, transcripts_folder
 
+    init_session_state()    
+    unique_user_id = get_user_email().replace("@gmail.com", "")
+
+    QNA_FOLDER = QNA_FOLDER + "/" + unique_user_id
+    recordings_folder = "recordings/" + unique_user_id
+    transcripts_folder = "transcripts/" + unique_user_id
+
+    create_folders_for_questions(QNA_FOLDER)
+    create_folders_for_user_data()
+    read_qna_data()
+    
+    st.session_state.initialization_done = True
+   
+    authenticate_user()
+        
     st.title("Welcome to Interview GPT")       
     _, extracted_words = zip(*question_data)
     display_sidebar(extracted_words)
