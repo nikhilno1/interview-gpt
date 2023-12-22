@@ -29,8 +29,9 @@ if REVOKE_ENDPOINT == "":
     REVOKE_ENDPOINT = st.secrets["REVOKE_ENDPOINT"]                    
 
 def authenticate_user():
-    if "auth" not in st.session_state:
+    if "auth" not in st.session_state:        
         # create a button to start the OAuth2 flow
+        st.write("Login to save your answers")
         oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
         result = oauth2.authorize_button(
             name="Continue with Google",
@@ -40,7 +41,7 @@ def authenticate_user():
             key="google",
             extras_params={"prompt": "consent", "access_type": "offline"},
             use_container_width=True,
-        )
+        )        
 
         if result:
             #st.write(result)
