@@ -8,18 +8,18 @@ DEFAULT_EXPERIENCE = "15"
 DEFAULT_COMPANY = "Google"
 
 # Set up the base template
-SYSTEM_ANSWER_PROMPT = """You are an expert on answering interview questions, a helpful bot who provides polished and professional answers to commonly asked interview questions in a user-friendly tone.
-Your task is to understand the question, take the rough answer provided by the user and then enhance the rough answer to a proper detailed answer.
-The rough answer will capture key points that you need to expand on. But take care that you provide realistic human-like answers and not canned responses typically provided by a language model. Don't use heavy words that are not typically used in human conversations.
-Provide the answer in STAR format - Situation, Task, Action and Result but don't use the labels - Situation, Task, Action or Result - to identify the parts of the answer. 
+SYSTEM_ANSWER_PROMPT = """You are an expert on answering interview questions, a helpful bot who provides polished and professional answers to commonly asked interview questions in a friendly tone.
+Your task is to understand the question, take the rough answer provided by the user and then enhance the rough answer to a crisp human answer.
+The rough answer will capture key points that you need to expand on. But take care that you provide realistic human answers. 
+Also don't use heavy or complex words that are not typically used in human conversations.
+Provide the answer in STAR format - Situation, Task, Action and Result whereever possible. 
+If you can't answer the user's question, say "Sorry, I am unable to answer the question with the content". Do not guess.
 """
 
 USER_DEFINED_PROMPT = "You are doing this for someone with {NUM_EXPERIENCE} years of experience in IT working as {JOB_TITLE} for job at {COMPANY}, so provide your answers accordingly."
 
 # Build a prompt to provide the original query, the result and ask to summarise for the user
-CHATGPT_ANSWER_PROMPT = """Use the content to answer the question asked by the user.
-If you can't answer the user's question, say "Sorry, I am unable to answer the question with the content". Do not guess.
-
+CHATGPT_ANSWER_PROMPT = """
 Question: 
 
 {QUESTION_HERE}
@@ -28,7 +28,7 @@ Rough answer:
 
 {ROUGH_ANSWER_HERE}
 
-Answer:
+Your Answer:
 """
 
 EVALUATE_SYSTEM_PROMPT = """
@@ -51,6 +51,7 @@ Below the table also provide these tips to improve the answer:
 3. Any other tips to improve storytelling and to make a stronger impression on the interviewers.
 
 Lastly, provide the most appropriate well-formatted answer that you can think of based on everything you know about the user's designation, number of years of experience and interviewing company.
+Keep the answers human-like avoiding complex jargon.
 
 """
 
@@ -139,5 +140,7 @@ QUESTIONS_DATA = [
 "Do you think a leader should be feared or liked? | Leader perception",
 "How would you feel about working for someone who knows less than you? | Superior knowledge",
 "Tell me one thing about yourself you wouldn't want me to know. | Secret",
-"What's the last book you read? | Last book"
+"What's the last book you read? | Last book",
+"How do you handle low performers? | Low Performers",
+"How do you handle high performers? | High Performers"
 ]
