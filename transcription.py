@@ -4,6 +4,8 @@ import openai
 import streamlit as st
 
 from audio_recorder_streamlit import audio_recorder
+from pydub import AudioSegment
+
 
 # import API key from .env file
 from dotenv import load_dotenv
@@ -51,7 +53,14 @@ def save_audio_file(audio_bytes, file_extension, recordings_folder):
     with open(file_name, "wb") as f:
         f.write(audio_bytes)
 
-    return file_name
+    # Reduce the bitrate since Whisper API has a 25 MB file size limit that gets exceeded with just 2 min 30 sec audio
+    audio = AudioSegment.from_file(file_name)
+    name, extension = file_name.rsplit(".", 1)
+    new_file_name = f"{name}_reduced.{extension}"
+    audio.export(new_file_name, bitrate='128k', format='mp3')  
+    os.remove(file_name)  
+
+    return new_file_name
 
 
 def transcribe_audio(file_path, transcripts_folder):
