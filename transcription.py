@@ -75,10 +75,10 @@ def run_transcription_app(recordings_folder):
     """
     st.markdown("---")
     st.header("Record your answer")
-    st.markdown('<small>Click the mic to start/stop the recording. Then click Analyze.</small>', unsafe_allow_html=True)    
+    st.markdown('<small>Click the mic to start/stop the recording. Then click Analyze. <i>(Max 4 mins.)</i></small>', unsafe_allow_html=True)    
    
     # Record Audio tab
-    audio_bytes = audio_recorder(energy_threshold=(-1.0, 1.0),  pause_threshold=120.0)
+    audio_bytes = audio_recorder(energy_threshold=(-1.0, 1.0),  pause_threshold=240.0)
     if audio_bytes:
         st.audio(audio_bytes, format="audio/wav")
         save_audio_file(audio_bytes, "mp3", recordings_folder)
