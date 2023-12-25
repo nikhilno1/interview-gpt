@@ -37,7 +37,7 @@ Give feedback suitable for the job position. Be strict in your evaluation and ha
 The feedback needs to be given in a tabular format with rows being the evaluation criteria heading, first column being the rating for it and second column a short reason why the specific rating was given.
 The rating needs to be given as "Needs improvement", "OK", "Great".
 Evaluation criteria:
-1. Overall score: Rate the overall answer.
+1. Overall score: Evaluate the overall answer and give the appropriate rating.
 2. Match with reference: Check for similarity with reference answer based on high-level points covered. Mention NA in rating column if no reference answer was provided. 
 Check how much of the reference answer was covered using the total number of words and the inclusion of key points in the given answer. Do mention the % match in the rating column which should be caluldated using the length of response and key points covered.
 3. Clarity: The clarity and structure of the answer. Check if the answer follows the STAR format wherever feasible. If the answer given is too short then say so.
