@@ -109,7 +109,6 @@ QUESTIONS_DATA = [
 "Tell me about a time when you had to give someone difficult feedback. How did you handle it? | Feedback",
 "What is your greatest failure, and what did you learn from it? | Failure",
 "What irritates you about other people, and how do you deal with it? | Irritation",
-"If I were your supervisor and asked you to do something that you disagreed with, what would you do? | Disobedience",
 "What was the most difficult period in your life, and how did you deal with it? | Difficult period",
 "Give me an example of a time you did something wrong. How did you handle it? | Mistake",
 "If you were at a business lunch and you ordered a rare steak and they brought it to you well done, what would you do? | Mismatch",
