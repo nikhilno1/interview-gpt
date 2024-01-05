@@ -23,6 +23,8 @@ st.markdown(
 
         Step 8 - Select another question from the sidebar or click "Pick a Random Question" to practice another question.
 
+        Note: The feature to save answers is not working reliably. I'll fix it if I see enough demand for it. Kindly leave feedback below.
+        
         #### [Feedback](https://forms.gle/knzJawEDyPBMj1bx5)
     
         
