@@ -31,7 +31,7 @@ if REVOKE_ENDPOINT == "":
 def authenticate_user():
     if "auth" not in st.session_state:        
         # create a button to start the OAuth2 flow
-        st.write("Login to save your answers (Warning: This feature is not reliable, save answers locally)")
+        st.write("Login to save your answers (Warning: This feature is not reliable, save your answers locally)")
         oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
         result = oauth2.authorize_button(
             name="Continue with Google",
