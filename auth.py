@@ -4,8 +4,15 @@ import os
 import base64
 import json
 from dotenv import load_dotenv
+import extra_streamlit_components as stx
 
 load_dotenv(dotenv_path=".env.local")
+
+@st.cache(allow_output_mutation=True)
+def get_manager():
+    return stx.CookieManager()
+cookie_manager = get_manager()
+cookies = cookie_manager.get_all()
 
 CLIENT_ID = os.getenv("CLIENT_ID", "")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "")
@@ -29,6 +36,11 @@ if REVOKE_ENDPOINT == "":
     REVOKE_ENDPOINT = st.secrets["REVOKE_ENDPOINT"]                    
 
 def authenticate_user():
+    value = cookie_manager.get("email")
+    if value != None:
+        st.write("Welcome " + value + "")
+        return
+    
     if "auth" not in st.session_state:        
         # create a button to start the OAuth2 flow
         st.write("Login to save your answers (Warning: This feature is not reliable, save your answers locally)")
@@ -57,6 +69,9 @@ def authenticate_user():
             st.session_state["token"] = result["token"]
             st.rerun()
     else:
+        value = cookie_manager.get("email")
+        if value == None:
+            cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2025, month=2, day=2))
         st.write("Welcome " + st.session_state["auth"] + "")
         #st.write(st.session_state["token"])
         if st.button("Logout"):
