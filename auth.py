@@ -5,6 +5,7 @@ import base64
 import json
 from dotenv import load_dotenv
 import extra_streamlit_components as stx
+import datetime
 
 load_dotenv(dotenv_path=".env.local")
 
@@ -36,44 +37,47 @@ if REVOKE_ENDPOINT == "":
     REVOKE_ENDPOINT = st.secrets["REVOKE_ENDPOINT"]                    
 
 def authenticate_user():
+    #handling cookies here
     value = cookie_manager.get("email")
     if value != None:
         st.write("Welcome " + value + "")
-        return
-    
-    if "auth" not in st.session_state:        
-        # create a button to start the OAuth2 flow
-        st.write("Login to save your answers (Warning: This feature is not reliable, save your answers locally)")
-        oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
-        result = oauth2.authorize_button(
-            name="Continue with Google",
-            icon="https://www.google.com.tw/favicon.ico",
-            redirect_uri=REDIRECT_URI,
-            scope="email",
-            key="google",
-            extras_params={"prompt": "consent", "access_type": "offline"},
-            use_container_width=True,
-        )        
-
-        if result:
-            #st.write(result)
-            # decode the id_token jwt and get the user's email address
-            id_token = result["token"]["id_token"]
-            # verify the signature is an optional step for security
-            payload = id_token.split(".")[1]
-            # add padding to the payload if needed
-            payload += "=" * (-len(payload) % 4)
-            payload = json.loads(base64.b64decode(payload))
-            email = payload["email"]
-            st.session_state["auth"] = email
-            st.session_state["token"] = result["token"]
-            st.rerun()
-    else:
-        value = cookie_manager.get("email")
-        if value == None:
-            cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2025, month=2, day=2))
-        st.write("Welcome " + st.session_state["auth"] + "")
-        #st.write(st.session_state["token"])
         if st.button("Logout"):
+            cookie_manager.delete("email")
             del st.session_state["auth"]
             del st.session_state["token"]
+    else:  
+        if "auth" not in st.session_state:        
+            # create a button to start the OAuth2 flow
+            st.write("Login to save your answers (Warning: This feature is not reliable, save your answers locally)")
+            oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
+            result = oauth2.authorize_button(
+                name="Continue with Google",
+                icon="https://www.google.com.tw/favicon.ico",
+                redirect_uri=REDIRECT_URI,
+                scope="email",
+                key="google",
+                extras_params={"prompt": "consent", "access_type": "offline"},
+                use_container_width=True,
+            )        
+    
+            if result:
+                #st.write(result)
+                # decode the id_token jwt and get the user's email address
+                id_token = result["token"]["id_token"]
+                # verify the signature is an optional step for security
+                payload = id_token.split(".")[1]
+                # add padding to the payload if needed
+                payload += "=" * (-len(payload) % 4)
+                payload = json.loads(base64.b64decode(payload))
+                email = payload["email"]
+                st.session_state["auth"] = email
+                cookie_manager.set("email", email , expires_at=datetime.datetime(year=2026, month=2, day=2))
+                st.session_state["token"] = result["token"]
+                st.rerun()
+        else:
+            st.write("Welcome " + st.session_state["auth"] + "")
+            if st.button("Logout"):
+                del st.session_state["auth"]
+                del st.session_state["token"]
+                cookie_manager.delete("email")
+                
