@@ -45,6 +45,7 @@ def authenticate_user():
             cookie_manager.delete("email")
             # del st.session_state["auth"]
             # del st.session_state["token"]
+            return
     else:  
         if "auth" not in st.session_state:        
             # create a button to start the OAuth2 flow
