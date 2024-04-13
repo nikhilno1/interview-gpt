@@ -46,7 +46,7 @@ def authenticate_user():
     #handling cookies here
     # value = get_email()
     cookie_manager = get_manager()
-    st.write(cookie_manager)
+    st.write(len(cookie_manager))
     # st.write(cookie_manager)
     # cookies = cookie_manager.get_all()
     
