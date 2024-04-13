@@ -10,15 +10,18 @@ import datetime
 
 load_dotenv(dotenv_path=".env.local")
 
+# using the extra streamlit component to get cookies data
 @st.cache(allow_output_mutation=True)
 def get_manager():
     return stx.CookieManager()
 
+# function to get email from cookies, not using now
 def get_email():
     cookie_manager = get_manager()
     st.write(cookie_manager)
     value = cookie_manager.get("email")
     return value
+    
 CLIENT_ID = os.getenv("CLIENT_ID", "")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "")
 REDIRECT_URI = os.getenv("REDIRECT_URI", "")
@@ -42,40 +45,18 @@ if REVOKE_ENDPOINT == "":
 
 def authenticate_user():
 
-
-    #handling cookies here
-    # value = get_email()
-    # cookie_manager = None
-    # while cookie_manager is None:
-    #     cookie_manager = get_manager()
     cookie_manager = get_manager()
-    # if len(cookie_manager.cookies) != 0:
-        
-    # st.write(len(cookie_manager))
-    # st.write(cookie_manager)
-    # cookies = cookie_manager.get_all()
-    
-    # st.write(cookies)
-    # value = True
-    # while value:
     cookies = cookie_manager.get_all()
     value = cookie_manager.get("email")
-    
-    # value = cookie_manager.get("email")
-    # st.write(value)
-    # time.sleep(3)
-    # st.write(value)
+
     if value != None:
         st.write("Welcome " + value + "")
         if st.button("Logout"):
             cookie_manager.delete("email")
             if "auth" in st.session_state:
                 del st.session_state["auth"]
-            # del st.session_state["token"]
-            # return
     else:  
         if "auth" not in st.session_state:
-            # time.sleep(3)
             # create a button to start the OAuth2 flow
             if len(cookie_manager.cookies) != 0:
                 st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
@@ -106,13 +87,5 @@ def authenticate_user():
                     st.rerun()
         else:
             cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
-            # st.write("Welcome " + st.session_state["auth"] + "")
-            # if st.button("Logout"):
-            #     cookie_manager.delete("email")
-            # st.write("Welcome" + st.session_state["auth"] + "")
-            # st.rerun()
-            # if st.button("Logout"):
-                # cookie_manager.delete("email")
-                # del st.session_state["auth"]
-                # del st.session_state["token"]
+
                 
