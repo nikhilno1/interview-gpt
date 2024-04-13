@@ -13,9 +13,10 @@ load_dotenv(dotenv_path=".env.local")
 @st.cache(allow_output_mutation=True)
 def get_manager():
     return stx.CookieManager()
-cookie_manager = get_manager()
+
 
 def get_email():
+    cookie_manager = get_manager()
     value = cookie_manager.get("email")
     return value
 CLIENT_ID = os.getenv("CLIENT_ID", "")
