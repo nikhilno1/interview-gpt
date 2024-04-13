@@ -60,22 +60,23 @@ def authenticate_user():
                 use_container_width=True,
             )        
 
-            # if result:
+            if result:
                 # decode the id_token jwt and get the user's email address
-            id_token = result["token"]["id_token"]
-            # verify the signature is an optional step for security
-            payload = id_token.split(".")[1]
-            # add padding to the payload if needed
-            payload += "=" * (-len(payload) % 4)
-            payload = json.loads(base64.b64decode(payload))
-            email = payload["email"]
-            st.session_state["auth"] = email
-            st.write("cookie has been added")
-            cookie_manager.set("email", email , expires_at=datetime.datetime(year=2026, month=2, day=2))
-            st.session_state["token"] = result["token"]
-            st.rerun()
+                id_token = result["token"]["id_token"]
+                # verify the signature is an optional step for security
+                payload = id_token.split(".")[1]
+                # add padding to the payload if needed
+                payload += "=" * (-len(payload) % 4)
+                payload = json.loads(base64.b64decode(payload))
+                email = payload["email"]
+                st.session_state["auth"] = email
+                st.write("cookie has been added")
+                # cookie_manager.set("email", email , expires_at=datetime.datetime(year=2026, month=2, day=2))
+                st.session_state["token"] = result["token"]
+                st.rerun()
         else:
             st.write("Welcome " + st.session_state["auth"] + "")
+            cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
             if st.button("Logout"):
                 del st.session_state["auth"]
                 del st.session_state["token"]
