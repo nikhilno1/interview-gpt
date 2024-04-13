@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from streamlit_oauth import OAuth2Component
 import os
 import base64
@@ -53,7 +54,7 @@ def authenticate_user():
     value = cookie_manager.get("email")
     # st.write(value)
     if value != None:
-        st.write("Welcome1 " + value + "")
+        st.write("Welcome " + value + "")
         if st.button("Logout"):
             cookie_manager.delete("email")
             # if "auth" in st.session_state:
@@ -61,7 +62,8 @@ def authenticate_user():
             # del st.session_state["token"]
             # return
     else:  
-        if "auth" not in st.session_state:        
+        if "auth" not in st.session_state:
+            time.sleep(1)
             # create a button to start the OAuth2 flow
             st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
             oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
