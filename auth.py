@@ -47,13 +47,14 @@ def authenticate_user():
     # value = get_email()
     cookie_manager = get_manager()
     # st.write(cookie_manager)
-    cookies = cookie_manager.get_all()
     # cookies = cookie_manager.get_all()
     
     # st.write(cookies)
-    value = True
-    while value:
-        value = cookie_manager.get("email")
+    # value = True
+    # while value:
+    value = cookie_manager.get("email")
+    cookies = cookie_manager.get_all()
+    
     # value = cookie_manager.get("email")
     # st.write(value)
     # time.sleep(3)
