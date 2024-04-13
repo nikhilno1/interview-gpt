@@ -71,6 +71,7 @@ def authenticate_user():
                 payload = json.loads(base64.b64decode(payload))
                 email = payload["email"]
                 st.session_state["auth"] = email
+                st.write("cookie has been added")
                 cookie_manager.set("email", email , expires_at=datetime.datetime(year=2026, month=2, day=2))
                 st.session_state["token"] = result["token"]
                 st.rerun()
