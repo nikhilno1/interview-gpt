@@ -9,11 +9,9 @@ import datetime
 
 load_dotenv(dotenv_path=".env.local")
 
-
 @st.cache(allow_output_mutation=True)
 def get_manager():
     return stx.CookieManager()
-
 
 def get_email():
     cookie_manager = get_manager()
@@ -45,8 +43,9 @@ def authenticate_user():
 
     # cookies = cookie_manager.get_all()
     #handling cookies here
-    value = get_email()
-    # value = cookie_manager.get("email")
+    # value = get_email()
+    cookie_manager = get_manager()
+    value = cookie_manager.get("email")
     st.write(value)
     if value != None:
         st.write("Welcome1 " + value + "")
