@@ -39,6 +39,7 @@ if REVOKE_ENDPOINT == "":
 def authenticate_user():
     #handling cookies here
     value = cookie_manager.get("email")
+    st.write(value)
     if value != None:
         st.write("Welcome1 " + value + "")
         if st.button("Logout"):
