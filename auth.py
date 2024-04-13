@@ -86,6 +86,5 @@ def authenticate_user():
                     st.session_state["token"] = result["token"]
                     st.rerun()
         else:
+            # setting email cookie here
             cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
-
-                
