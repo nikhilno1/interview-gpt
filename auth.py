@@ -76,35 +76,36 @@ def authenticate_user():
             # del st.session_state["token"]
             # return
     else:  
-        if "auth" not in st.session_state and len(cookie_manager.cookies) != 0:
+        if "auth" not in st.session_state:
             # time.sleep(3)
             # create a button to start the OAuth2 flow
-            st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
-            oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
-            result = oauth2.authorize_button(
-                name="Continue with Google",
-                icon="https://www.google.com.tw/favicon.ico",
-                redirect_uri=REDIRECT_URI,
-                scope="email",
-                key="google",
-                extras_params={"prompt": "consent", "access_type": "offline"},
-                use_container_width=True,
-            )        
-
-            if result:
-                # decode the id_token jwt and get the user's email address
-                id_token = result["token"]["id_token"]
-                # verify the signature is an optional step for security
-                payload = id_token.split(".")[1]
-                # add padding to the payload if needed
-                payload += "=" * (-len(payload) % 4)
-                payload = json.loads(base64.b64decode(payload))
-                email = payload["email"]
-                st.session_state["auth"] = email
-                st.write("cookie has been added")
-                # cookie_manager.set("email", email , expires_at=datetime.datetime(year=2026, month=2, day=2))
-                st.session_state["token"] = result["token"]
-                st.rerun()
+            if len(cookie_manager.cookies) != 0:
+                st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
+                oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
+                result = oauth2.authorize_button(
+                    name="Continue with Google",
+                    icon="https://www.google.com.tw/favicon.ico",
+                    redirect_uri=REDIRECT_URI,
+                    scope="email",
+                    key="google",
+                    extras_params={"prompt": "consent", "access_type": "offline"},
+                    use_container_width=True,
+                )        
+    
+                if result:
+                    # decode the id_token jwt and get the user's email address
+                    id_token = result["token"]["id_token"]
+                    # verify the signature is an optional step for security
+                    payload = id_token.split(".")[1]
+                    # add padding to the payload if needed
+                    payload += "=" * (-len(payload) % 4)
+                    payload = json.loads(base64.b64decode(payload))
+                    email = payload["email"]
+                    st.session_state["auth"] = email
+                    st.write("cookie has been added")
+                    # cookie_manager.set("email", email , expires_at=datetime.datetime(year=2026, month=2, day=2))
+                    st.session_state["token"] = result["token"]
+                    st.rerun()
         else:
             cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
             # st.write("Welcome " + st.session_state["auth"] + "")
