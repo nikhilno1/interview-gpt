@@ -48,7 +48,7 @@ def authenticate_user():
     else:  
         if "auth" not in st.session_state:        
             # create a button to start the OAuth2 flow
-            st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally)")
+            st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
             oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
             result = oauth2.authorize_button(
                 name="Continue with Google",
@@ -59,9 +59,9 @@ def authenticate_user():
                 extras_params={"prompt": "consent", "access_type": "offline"},
                 use_container_width=True,
             )        
+            st.write(result)
     
             if result:
-                #st.write(result)
                 # decode the id_token jwt and get the user's email address
                 id_token = result["token"]["id_token"]
                 # verify the signature is an optional step for security
