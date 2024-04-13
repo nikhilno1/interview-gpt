@@ -49,8 +49,6 @@ def authenticate_user():
     # while cookie_manager is None:
     #     cookie_manager = get_manager()
     cookie_manager = get_manager()
-    st.write(len(cookie_manager.cookies))
-
     # if len(cookie_manager.cookies) != 0:
         
     # st.write(len(cookie_manager))
