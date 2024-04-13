@@ -40,7 +40,7 @@ def authenticate_user():
     #handling cookies here
     value = cookie_manager.get("email")
     if value != None:
-        st.write("Welcome " + value + "")
+        st.write("Welcome1 " + value + "")
         if st.button("Logout"):
             cookie_manager.delete("email")
             # del st.session_state["auth"]
@@ -76,7 +76,7 @@ def authenticate_user():
                 st.session_state["token"] = result["token"]
                 st.rerun()
         else:
-            st.write("Welcome " + st.session_state["auth"] + "")
+            st.write("Welcome2 " + st.session_state["auth"] + "")
             cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
             if st.button("Logout"):
                 del st.session_state["auth"]
