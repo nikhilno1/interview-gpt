@@ -17,7 +17,7 @@ def get_manager():
 
 def get_email():
     cookie_manager = get_manager()
-    st.write(cookies_manager)
+    st.write(cookie_manager)
     value = cookie_manager.get("email")
     return value
 CLIENT_ID = os.getenv("CLIENT_ID", "")
