@@ -47,7 +47,9 @@ def authenticate_user():
     cookie_manager = get_manager()
     # st.write(cookie_manager)
     cookies = cookie_manager.get_all()
-    st.write(cookies)
+    cookies = cookie_manager.get_all()
+    
+    # st.write(cookies)
     value = cookie_manager.get("email")
     st.write(value)
     if value != None:
