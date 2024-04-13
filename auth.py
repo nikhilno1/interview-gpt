@@ -43,8 +43,8 @@ def authenticate_user():
         st.write("Welcome " + value + "")
         if st.button("Logout"):
             cookie_manager.delete("email")
-            del st.session_state["auth"]
-            del st.session_state["token"]
+            # del st.session_state["auth"]
+            # del st.session_state["token"]
     else:  
         if "auth" not in st.session_state:        
             # create a button to start the OAuth2 flow
@@ -79,6 +79,6 @@ def authenticate_user():
             cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
             if st.button("Logout"):
                 del st.session_state["auth"]
-                del st.session_state["token"]
+                # del st.session_state["token"]
                 cookie_manager.delete("email")
                 
