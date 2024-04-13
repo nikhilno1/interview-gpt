@@ -50,6 +50,9 @@ def authenticate_user():
     #     cookie_manager = get_manager()
     cookie_manager = get_manager()
     st.write(cookie_manager.cookies)
+
+    if "email" in cookie_manager.cookies:
+        st.write("found"
     # st.write(len(cookie_manager))
     # st.write(cookie_manager)
     # cookies = cookie_manager.get_all()
