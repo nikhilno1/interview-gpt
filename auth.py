@@ -41,10 +41,13 @@ if REVOKE_ENDPOINT == "":
 
 def authenticate_user():
 
-    # cookies = cookie_manager.get_all()
+
     #handling cookies here
     # value = get_email()
     cookie_manager = get_manager()
+    st.write(cookie_manager)
+    cookies = cookie_manager.get_all()
+    st.write(cookie_manager)
     value = cookie_manager.get("email")
     st.write(value)
     if value != None:
