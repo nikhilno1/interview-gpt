@@ -10,7 +10,14 @@ import datetime
 load_dotenv(dotenv_path=".env.local")
 
 
+@st.cache(allow_output_mutation=True)
+def get_manager():
+    return stx.CookieManager()
+cookie_manager = get_manager()
 
+def get_email():
+    value = cookie_manager.get("email")
+    return value
 CLIENT_ID = os.getenv("CLIENT_ID", "")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "")
 REDIRECT_URI = os.getenv("REDIRECT_URI", "")
@@ -33,13 +40,11 @@ if REVOKE_ENDPOINT == "":
     REVOKE_ENDPOINT = st.secrets["REVOKE_ENDPOINT"]                    
 
 def authenticate_user():
-    @st.cache(allow_output_mutation=True)
-    def get_manager():
-        return stx.CookieManager()
-    cookie_manager = get_manager()
+
     # cookies = cookie_manager.get_all()
     #handling cookies here
-    value = cookie_manager.get("email")
+    value = get_email()
+    # value = cookie_manager.get("email")
     st.write(value)
     if value != None:
         st.write("Welcome1 " + value + "")
