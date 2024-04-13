@@ -51,7 +51,7 @@ def authenticate_user():
     
     # st.write(cookies)
     value = cookie_manager.get("email")
-    st.write(value)
+    # st.write(value)
     if value != None:
         st.write("Welcome1 " + value + "")
         if st.button("Logout"):
