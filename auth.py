@@ -49,6 +49,7 @@ def authenticate_user():
     # while cookie_manager is None:
     #     cookie_manager = get_manager()
     cookie_manager = get_manager()
+    st.write(cookie_manager)
     # st.write(len(cookie_manager))
     # st.write(cookie_manager)
     # cookies = cookie_manager.get_all()
@@ -56,7 +57,6 @@ def authenticate_user():
     # st.write(cookies)
     # value = True
     # while value:
-    time.sleep(10)
     cookies = cookie_manager.get_all()
     value = cookie_manager.get("email")
     
