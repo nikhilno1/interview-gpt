@@ -49,7 +49,7 @@ def authenticate_user():
     # while cookie_manager is None:
     #     cookie_manager = get_manager()
     cookie_manager = get_manager()
-    st.write(cookie_manager.cookies)
+    st.write(len(cookie_manager.cookies))
 
     if "email" in cookie_manager.cookies:
         st.write("found")
