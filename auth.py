@@ -54,6 +54,7 @@ def authenticate_user():
     value = cookie_manager.get("email")
     # st.write(value)
     # time.sleep(3)
+    st.write(value)
     if value != None:
         st.write("Welcome " + value + "")
         if st.button("Logout"):
@@ -64,7 +65,7 @@ def authenticate_user():
             # return
     else:  
         if "auth" not in st.session_state:
-            time.sleep(3)
+            # time.sleep(3)
             # create a button to start the OAuth2 flow
             st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
             oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
