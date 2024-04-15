@@ -86,5 +86,9 @@ def authenticate_user():
                     st.session_state["token"] = result["token"]
                     st.rerun()
         else:
+            # Calculate expiry date
+            expiry_date = datetime.datetime.now() + datetime.timedelta(days=7)
             # setting email cookie here
-            cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
+            cookie_manager.set("email", st.session_state["auth"], expires_at=expiry_date)
+
+            # cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
