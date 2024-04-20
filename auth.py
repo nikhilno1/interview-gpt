@@ -90,7 +90,7 @@ def authenticate_user():
             expiry_date = datetime.datetime.now() + datetime.timedelta(days=7)
             # setting email cookie here
             cookie_manager.set("email", st.session_state["auth"], expires_at=expiry_date)
-            st.write("Welcome " + value + "")
+            st.write("Welcome " + st.session_state["auth"] + "")
             if st.button("Logout"):
                 cookie_manager.delete("email")
                 if "auth" in st.session_state:
