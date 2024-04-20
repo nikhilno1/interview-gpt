@@ -74,7 +74,8 @@ QUESTIONS_DATA = [
 "How have you managed a poor performer on your team? | Management",
 "How do you approach building a team roadmap? | Roadmapping",
 "Tell me about a project that wasn't successful. | Failed project",
-"Tell me about a conflict at work. | Conflict",
+"Tell me about a conflict at work. | Conflict at Work",
+"How do you handle conflict within your team? | Conflict in Team",
 "Have you promoted someone? How do you go about it? | Promotion",
 "As a manager, how do you handle trade-offs? | Trade-offs",
 "How do you coach and develop your engineering team? | Coaching",
@@ -86,7 +87,7 @@ QUESTIONS_DATA = [
 "What are your strengths? | Strength",
 "What are your weaknesses? | Weakness",
 "How do you handle stress and pressure? | Stress",
-"Describe a difficult work situation / project and how you overcame it. | Overcoming",
+"Describe a difficult work situation / project and how you overcame it. | Difficult Project",
 "What was the biggest accomplishment in this position? | Accomplishment",
 "How do you evaluate success? | Evaluation",
 "Why are you leaving or have left your job? | Departure",
@@ -143,5 +144,8 @@ QUESTIONS_DATA = [
 "What's the last book you read? | Last book",
 "How do you handle low performers? | Low Performers",
 "How do you handle high performers? | High Performers",
+"How do you prioritize your tasks and manage your time effectively? | Prioritize",
+"Describe how you have fostered innovation within your teams | Innovation",
+"How do you ensure your team's goals align with the broader organizational goals? | Alignment",
 "Why do you want to join this company? | This Company"
 ]

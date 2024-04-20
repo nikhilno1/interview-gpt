@@ -69,3 +69,5 @@ qna/*
 .pkl
 data/*.pkl
 
+google_credentials.json
+.streamlit/secrets.toml
