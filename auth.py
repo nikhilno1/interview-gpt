@@ -105,6 +105,6 @@ def authenticate_user():
             st.write("Welcome " + st.session_state["auth"] + "")
             if st.button("Logout"):
                 cookie_manager.delete("email")
-                if "auth" in st.session_state:
-                    del st.session_state["auth"]
+                # if "auth" in st.session_state:
+                #     del st.session_state["auth"]
             # cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
