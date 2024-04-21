@@ -50,15 +50,15 @@ def authenticate_user():
     st.write(cookies)
     value = cookie_manager.get("email")
     
-    if value != None and "auth" not in st.session_state :
+    if value != None:
         # st.session_state["auth"] = value
         st.write("Welcome " + value + "")
         # st.write("auth" in st.session_state)
         
         if st.button("Logout"):
             cookie_manager.delete("email")
-            if "auth" in st.session_state:
-                del st.session_state["auth"]
+            # if "auth" in st.session_state:
+            #     del st.session_state["auth"]
             st.session_state["auth"] = value
             # cookies["email"] = None
             # st.write("auth" in st.session_state)
@@ -96,8 +96,7 @@ def authenticate_user():
                     st.session_state["token"] = result["token"]
                     st.rerun()
         else:
-            st.write("auth" in st.session_state)
-            
+         
             # Calculate expiry date
             expiry_date = datetime.datetime.now() + datetime.timedelta(days=7)
             # setting email cookie here
@@ -105,6 +104,6 @@ def authenticate_user():
             st.write("Welcome " + st.session_state["auth"] + "")
             if st.button("Logout"):
                 cookie_manager.delete("email")
-                # if "auth" in st.session_state:
-                #     del st.session_state["auth"]
+                if "auth" in st.session_state:
+                    del st.session_state["auth"]
             # cookie_manager.set("email", st.session_state["auth"] , expires_at=datetime.datetime(year=2026, month=2, day=2))
