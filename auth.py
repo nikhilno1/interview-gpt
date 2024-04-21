@@ -65,8 +65,6 @@ def authenticate_user():
     else:  
         if "auth" not in st.session_state:
             # create a button to start the OAuth2 flow
-            st.write("auth" in st.session_state)
-            
             if len(cookie_manager.cookies) != 0:
                 st.write(len(cookie_manager.cookies))
                 st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
@@ -96,6 +94,8 @@ def authenticate_user():
                     st.session_state["token"] = result["token"]
                     st.rerun()
         else:
+            st.write("auth" in st.session_state)
+            
             # Calculate expiry date
             expiry_date = datetime.datetime.now() + datetime.timedelta(days=7)
             # setting email cookie here
