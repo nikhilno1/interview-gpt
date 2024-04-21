@@ -48,14 +48,13 @@ def authenticate_user():
     cookie_manager = get_manager()
     cookies = cookie_manager.get_all()
     value = cookie_manager.get("email")
-
+    st.write(value)
     if value != None:
         st.write("Welcome " + value + "")
         if st.button("Logout"):
             if "auth" in st.session_state:
                 del st.session_state["auth"]
             cookie_manager.delete("email")
-            authenticate_user()
             # value = cookie_manager.get("email")
             
     else:  
