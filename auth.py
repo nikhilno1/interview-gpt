@@ -56,7 +56,7 @@ def authenticate_user():
             # if "auth" in st.session_state:
             #     del st.session_state["auth"]
             cookie_manager.delete("email")
-            return -1
+            # return -1
             # value = cookie_manager.get("email")
             
     else:  
