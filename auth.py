@@ -51,6 +51,7 @@ def authenticate_user():
     value = cookie_manager.get("email")
     
     if value != None:
+        st.session_state["auth"] = value
         st.write("Welcome " + value + "")
         st.write("auth" in st.session_state)
         
