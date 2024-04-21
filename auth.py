@@ -50,7 +50,7 @@ def authenticate_user():
     st.write(cookies)
     value = cookie_manager.get("email")
     
-    if value != None:
+    if value != None and "auth" not in st.session_state :
         # st.session_state["auth"] = value
         st.write("Welcome " + value + "")
         # st.write("auth" in st.session_state)
@@ -59,7 +59,8 @@ def authenticate_user():
             cookie_manager.delete("email")
             if "auth" in st.session_state:
                 del st.session_state["auth"]
-            cookies["email"] = None
+            st.session_state["auth"] = value
+            # cookies["email"] = None
             # st.write("auth" in st.session_state)
             
             
