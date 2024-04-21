@@ -48,8 +48,6 @@ def authenticate_user():
     cookie_manager = get_manager()
     cookies = cookie_manager.get_all()
     st.write(cookies)
-    st.write(cookie_manager)
-    
     value = cookie_manager.get("email")
     
     if value != None:
@@ -64,10 +62,8 @@ def authenticate_user():
     else:  
         if "auth" not in st.session_state:
             # create a button to start the OAuth2 flow
-            st.write("1")
             if len(cookie_manager.cookies) != 0:
                 st.write(len(cookie_manager.cookies))
-                st.write("2")
                 st.write("Login to save your answers (Warning: This feature is unreliable, save your answers locally.)")
                 oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, TOKEN_ENDPOINT, REVOKE_ENDPOINT)
                 result = oauth2.authorize_button(
