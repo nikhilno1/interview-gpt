@@ -52,9 +52,11 @@ def authenticate_user():
     if value != None:
         st.write("Welcome " + value + "")
         if st.button("Logout"):
-            cookie_manager.delete("email")
             if "auth" in st.session_state:
                 del st.session_state["auth"]
+            cookie_manager.delete("email")
+            value = cookie_manager.get("email")
+            
     else:  
         if "auth" not in st.session_state:
             # create a button to start the OAuth2 flow
