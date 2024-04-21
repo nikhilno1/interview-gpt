@@ -61,8 +61,8 @@ def authenticate_user():
             # st.write("auth" in st.session_state)
             cookie_manager.delete("email")
             p = get_manager()
-            cookies = p.get_all()
-            st.write(cookies)
+            q = p.get_all()
+            st.write(q)
             # cookie_manager = []
             # return -1
             # value = cookie_manager.get("email")
