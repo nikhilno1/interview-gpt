@@ -59,7 +59,7 @@ def authenticate_user():
             cookie_manager.delete("email")
             if "auth" in st.session_state:
                 del st.session_state["auth"]
-            cookies = {}
+            cookies["email"] = None
             # st.write("auth" in st.session_state)
             
             
