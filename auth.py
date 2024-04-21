@@ -56,10 +56,10 @@ def authenticate_user():
         st.write("auth" in st.session_state)
         
         if st.button("Logout"):
-            # if "auth" in st.session_state:
-            #     del st.session_state["auth"]
+            if "auth" in st.session_state:
+                del st.session_state["auth"]
             cookie_manager.delete("email")
-            cookie_manager = []
+            # cookie_manager = []
             # return -1
             # value = cookie_manager.get("email")
             
