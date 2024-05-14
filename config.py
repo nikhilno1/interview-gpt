@@ -1,6 +1,7 @@
 #CHAT_MODEL = "gpt-3.5-turbo-0613"
 #CHAT_MODEL = "gpt-4-0613"
-CHAT_MODEL = "gpt-4-1106-preview"
+#CHAT_MODEL = "gpt-4-1106-preview"
+CHAT_MODEL = "gpt-4o-2024-05-13"
 EMBEDDINGS_MODEL = "text-embedding-ada-002"
 
 DEFAULT_JOB_TITLE = "Engineering Manager"
